@@ -32,3 +32,37 @@ export const createContact = async (req, res) => {
     });
   }
 };
+export const getAllContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      contacts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+export const deleteContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Contact.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Message deleted successfully",
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};

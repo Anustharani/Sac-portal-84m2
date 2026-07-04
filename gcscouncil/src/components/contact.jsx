@@ -2,77 +2,52 @@ import { useState } from "react";
 import axios from "axios";
 
 function Contact() {
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
-      setLoading(true);
-
-      const response = await axios.post(
+      const res = await axios.post(
         "http://localhost:5000/api/contact",
         formData
       );
 
-      alert(response.data.message);
+      alert(res.data.message);
 
       setFormData({
         name: "",
         email: "",
         subject: "",
-        message: ""
+        message: "",
       });
 
     } catch (error) {
-
-      console.log(error);
-
-      alert("Something went wrong");
-
-    } finally {
-
-      setLoading(false);
-
+      alert(error.response?.data?.message || "Something went wrong");
     }
-
   };
 
   return (
+    <section className="py-20 bg-slate-100">
+      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl p-8">
 
-    <section className="py-20 bg-slate-900 text-white">
-
-      <div className="max-w-3xl mx-auto px-8">
-
-        <h2 className="text-4xl font-bold text-center">
-
+        <h2 className="text-4xl font-bold text-center mb-8">
           Contact Us
-
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6 mt-10"
-        >
+        <form onSubmit={handleSubmit}>
 
           <input
             type="text"
@@ -80,16 +55,18 @@ function Contact() {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg text-black"
+            className="w-full border p-3 rounded-lg mb-4"
+            required
           />
 
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg text-black"
+            className="w-full border p-3 rounded-lg mb-4"
+            required
           />
 
           <input
@@ -98,36 +75,32 @@ function Contact() {
             placeholder="Subject"
             value={formData.subject}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg text-black"
+            className="w-full border p-3 rounded-lg mb-4"
+            required
           />
 
           <textarea
-            rows="5"
             name="message"
-            placeholder="Your Message"
+            rows="5"
+            placeholder="Enter your message"
             value={formData.message}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg text-black"
-          ></textarea>
+            className="w-full border p-3 rounded-lg mb-4"
+            required
+          />
 
           <button
             type="submit"
-            disabled={loading}
-            className="bg-cyan-500 px-8 py-3 rounded-lg"
+            className="w-full bg-cyan-500 text-white py-3 rounded-lg hover:bg-cyan-600"
           >
-
-            {loading ? "Sending..." : "Send Message"}
-
+            Send Message
           </button>
 
         </form>
 
       </div>
-
     </section>
-
   );
-
 }
 
 export default Contact;

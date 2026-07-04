@@ -25,12 +25,15 @@ const handleSubmit = async (e) => {
       formData
     );
 
-    localStorage.setItem("token", res.data.token);
+   localStorage.setItem("token", res.data.token);
 
-    alert("Login Successful");
+localStorage.setItem("role", res.data.user.role);
 
-    navigate("/dashboard");
-
+if (res.data.user.role === "admin") {
+  navigate("/admin");
+} else {
+  navigate("/dashboard");
+}
   } catch (error) {
     alert(error.response?.data?.message || "Login Failed");
   }
@@ -63,13 +66,12 @@ const handleSubmit = async (e) => {
           onChange={handleChange}
           className="w-full border p-3 rounded mb-4"
         />
-<button
-  type="button"
-  onClick={() => alert("Button Clicked")}
+   <button
+  type="submit"
   className="w-full bg-cyan-500 text-white py-3 rounded"
 >
   Login
-</button>
+</button>     
 
         <p className="mt-4 text-center">
           Don't have an account?{" "}
